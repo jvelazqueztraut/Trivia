@@ -118,7 +118,7 @@ public:
     void mousePressed(int x, int y, int button){
         if(isEntering() || isExiting())
             return;
-        sceneManager.gotoScene(INICIO_SCENE_NAME);
+        sceneManager.gotoScene(MEMOTEST_SCENE_NAME);
     }
     
     ofxAnimatableObject<ofImage> title;

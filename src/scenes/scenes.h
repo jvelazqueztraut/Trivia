@@ -1,7 +1,7 @@
 #define _DEBUG
 
-#define APP_WIDTH 1920.0
-#define APP_HEIGHT 1080.0
+#define APP_WIDTH 1280.0
+#define APP_HEIGHT 720.0
 
 #include "Inicio.h"
 class Inicio;
