@@ -162,7 +162,7 @@ void testApp::mouseDragged(int x, int y, int button) {
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button) {
     if(inicio.inside(ofPoint(x,y))){
-        sceneManager.gotoScene(MEMOTEST_SCENE_NAME, false);
+        sceneManager.gotoScene(INICIO_SCENE_NAME, false);
     }
 }
 
