@@ -1,3 +1,5 @@
+ofxAndroid
+ofxAccelerometer
 ofxAnimatable
 ofxAppUtils
 ofxGui

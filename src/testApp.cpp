@@ -2,11 +2,8 @@
 
 //--------------------------------------------------------------
 void testApp::setup() {
-#ifdef _DEBUG
-    ofShowCursor();
-#else
-	ofHideCursor();
-#endif
+	ofSetOrientation(OF_ORIENTATION_90_RIGHT);
+    ofSetLogLevel(OF_LOG_VERBOSE);
     ofLogWarning()<<"Resolution: "<<ofGetWidth()<<","<<ofGetHeight();
     // setup for nice jaggy-less rendering
 	ofSetVerticalSync(true);
@@ -62,7 +59,7 @@ void testApp::update() {
     sceneManager.update();
     inicio.update(dt);
     
-    ofSoundUpdate();
+    //ofSoundUpdate();
 }
 
 //--------------------------------------------------------------
@@ -165,7 +162,7 @@ void testApp::mouseDragged(int x, int y, int button) {
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button) {
     if(inicio.inside(ofPoint(x,y))){
-        sceneManager.gotoScene(INICIO_SCENE_NAME, false);
+        sceneManager.gotoScene(MEMOTEST_SCENE_NAME, false);
     }
 }
 
@@ -176,4 +173,69 @@ void testApp::mouseReleased(int x, int y, int button) {
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h) {
     ofLogWarning()<<"Resolution change: "<<ofGetWidth()<<","<<ofGetHeight();
+}
+
+//--------------------------------------------------------------
+void  testApp::touchDown(int x, int y, int id){
+
+}
+
+//--------------------------------------------------------------
+void testApp::touchMoved(int x, int y, int id){
+
+}
+
+//--------------------------------------------------------------
+void testApp::touchUp(int x, int y, int id){
+
+}
+
+//--------------------------------------------------------------
+void testApp::touchDoubleTap(int x, int y, int id){
+
+}
+
+//--------------------------------------------------------------
+void testApp::touchCancelled(int x, int y, int id){
+
+}
+
+//--------------------------------------------------------------
+void testApp::swipe(ofxAndroidSwipeDir swipeDir, int id){
+
+}
+
+//--------------------------------------------------------------
+void testApp::pause(){
+
+}
+
+//--------------------------------------------------------------
+void testApp::stop(){
+
+}
+
+//--------------------------------------------------------------
+void testApp::resume(){
+
+}
+
+//--------------------------------------------------------------
+void testApp::reloadTextures(){
+
+}
+
+//--------------------------------------------------------------
+bool testApp::backPressed(){
+	return false;
+}
+
+//--------------------------------------------------------------
+void testApp::okPressed(){
+
+}
+
+//--------------------------------------------------------------
+void testApp::cancelPressed(){
+
 }

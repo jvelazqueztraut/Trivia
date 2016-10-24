@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxAndroid.h"
 #include "ofxAppUtils.h"
 #include "ofxAnimatableObject.h"
 
@@ -24,6 +25,22 @@ class testApp : public ofxApp { // <-- inherits ofxApp instead of ofBaseApp
 		void mouseReleased(int x, int y, int button);
 		
 		void windowResized(int w, int h);
+
+		void touchDown(int x, int y, int id);
+		void touchMoved(int x, int y, int id);
+		void touchUp(int x, int y, int id);
+		void touchDoubleTap(int x, int y, int id);
+		void touchCancelled(int x, int y, int id);
+		void swipe(ofxAndroidSwipeDir swipeDir, int id);
+
+		void pause();
+		void stop();
+		void resume();
+		void reloadTextures();
+
+		bool backPressed();
+		void okPressed();
+		void cancelPressed();
 		
 		// handles the scenes
 		ofxSceneManager sceneManager;
