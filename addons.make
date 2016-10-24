@@ -1,0 +1,4 @@
+ofxAnimatable
+ofxAppUtils
+ofxGui
+ofxJSON
