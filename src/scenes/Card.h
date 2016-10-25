@@ -50,9 +50,9 @@ public:
     
     void lock(float delay=0.0f){
         front.color.setCurve(EASE_IN);
-        front.color.animateToAfterDelay(ofColor(200,(showing?255:0)),delay);
+        front.color.animateToAfterDelay(ofColor(225,(showing?255:0)),delay);
         back.color.setCurve(EASE_IN);
-        back.color.animateToAfterDelay(ofColor(200,(showing?0:255)),delay);
+        back.color.animateToAfterDelay(ofColor(225,(showing?0:255)),delay);
     }
     
     void reset(){

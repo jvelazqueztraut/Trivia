@@ -10,17 +10,44 @@ public:
     // set the scene name through the base class initializer
     Inicio(ofxSceneManager& sm) : sceneManager(sm), ofxScene(INICIO_SCENE_NAME, false) {
 
-        title.load("00_Inicio/titulo-01.png");
+        icon.load("00_Inicio/icono.png");
+        icon.setAnchorPercent(0.5,0.5);
+        icon.position.setDuration(2.5);
+        icon.position.setCurve(TANH);
+        
+        title.load("00_Inicio/titulo.png");
         title.setAnchorPercent(0.5,0.5);
         title.position.setDuration(2.);
         title.position.setCurve(TANH);
         
+        membrete.load("membretre.png");
+        membrete.setAnchorPercent(0.5,1.0);
+        membrete.position.setDuration(1.5);
+        membrete.position.setCurve(TANH);
+        
+        memotest.load("00_Inicio/memotest.png");
+        memotest.setAnchorPercent(0.5,0.5);
+        
+        trivia.load("00_Inicio/trivia.png");
+        trivia.setAnchorPercent(0.5,0.5);
+        
         sound.load("Sounds/00_0.2-Transicion0a1.wav");
+        soundMemotest.load("Sounds/01_1.2-Mujer.wav");
+        soundTrivia.load("Sounds/01_1.1-Hombre.wav");
     }
     
     // scene setup
     void setup() {
-        title.setPosition(ofGetWidth()*0.5,-ofGetHeight()*0.6);
+        icon.setPosition(ofGetWidth()*0.25,-ofGetHeight()*0.6);
+        title.setPosition(ofGetWidth()*0.65,-ofGetHeight()*0.6);
+        membrete.setPosition(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight());
+        
+        trivia.setPosition(ofGetWidth()*0.65,ofGetHeight()*0.45);
+        trivia.setSize(0.);
+        
+        memotest.setPosition(ofGetWidth()*0.65,ofGetHeight()*0.45+trivia.getHeight()+20);
+        memotest.setSize(0.);
+
         time=ofGetElapsedTimef();
     }
     
@@ -29,15 +56,20 @@ public:
 		
         // called on first enter update
         if(isEnteringFirst()) {
-
-            title.position.animateTo(ofPoint(ofGetWidth()*0.5,ofGetHeight()*0.5));
+            icon.position.animateTo(ofPoint(ofGetWidth()*0.25,ofGetHeight()*0.4));
+            title.position.animateTo(ofPoint(ofGetWidth()*0.65,ofGetHeight()*0.25));
+            membrete.position.animateTo(ofPoint(ofGetWidth()*0.5,ofGetHeight()));
+            
+            trivia.size.animateToAfterDelay(1.,1.);
+            memotest.size.animateToAfterDelay(1.,1.5);
+            
             ofLogNotice(INICIO_SCENE_NAME) << "update enter";
         }
         
         update();
 		
         // call finishedEntering() to indicate scne is done entering
-        if(!title.isOrWillBeAnimating()) {
+        if(!trivia.isOrWillBeAnimating() || !memotest.isOrWillBeAnimating()) {
             finishedEntering();
             ofLogNotice(INICIO_SCENE_NAME) << "update enter done";
         }
@@ -49,6 +81,11 @@ public:
         float dt = t - time;
         time = t;
         title.update(dt);
+        icon.update(dt);
+        membrete.update(dt);
+        
+        memotest.update(dt);
+        trivia.update(dt);
     }
     
     // called when scene is exiting
@@ -56,9 +93,9 @@ public:
 		
         // called on first exit update
         if(isExitingFirst()) {
-            title.position.animateTo(ofPoint(ofGetWidth()*0.5,ofGetHeight()*1.6));
-            
-            
+            icon.position.animateTo(ofPoint(ofGetWidth()*0.25,-ofGetHeight()*0.6));
+            title.position.animateTo(ofPoint(ofGetWidth()*0.65,-ofGetHeight()*0.6));
+            membrete.position.animateToAfterDelay(ofPoint(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight()),1.);
             sound.play();
             ofLogNotice(INICIO_SCENE_NAME) << "update exit";
         }
@@ -66,7 +103,7 @@ public:
         update();
 		
         // call finishedExiting() to indicate scene is done exiting
-        if(!title.isOrWillBeAnimating()) {
+        if(!membrete.isOrWillBeAnimating()) {
             finishedExiting();
             ofLogNotice(INICIO_SCENE_NAME) << "update exit done";
         }
@@ -75,6 +112,11 @@ public:
     // draw
     void draw() {        
         title.draw();
+        icon.draw();
+        membrete.draw();
+        
+        memotest.draw();
+        trivia.draw();
     }
     
     // cleanup
@@ -85,11 +127,23 @@ public:
     void mousePressed(int x, int y, int button){
         if(isEntering() || isExiting())
             return;
-        sceneManager.gotoScene(GENERO_SCENE_NAME);
+        if(memotest.inside(ofPoint(x,y))){
+            soundMemotest.play();
+            memotest.size.animateToAfterDelay(0.,1.);
+            trivia.size.animateToAfterDelay(0.,0.);
+            sceneManager.gotoScene(MEMOTEST_SCENE_NAME);
+        }
+        else if(trivia.inside(ofPoint(x,y))){
+            soundTrivia.play();
+            trivia.size.animateToAfterDelay(0.,1.);
+            memotest.size.animateToAfterDelay(0.,0.);
+            sceneManager.gotoScene(PREGUNTA_SCENE_NAME);
+        }
     }
     
-    ofxAnimatableObject<ofImage> title;
-    ofSoundPlayer sound;
+    ofxAnimatableObject<ofImage> title,icon,membrete;
+    ofxAnimatableObject<ofImage> memotest,trivia;
+    ofSoundPlayer sound,soundMemotest,soundTrivia;
     float time;
     ofxSceneManager& sceneManager;
 };

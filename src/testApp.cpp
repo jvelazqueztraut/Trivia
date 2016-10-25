@@ -10,16 +10,16 @@ void testApp::setup() {
     ofLogWarning()<<"Resolution: "<<ofGetWidth()<<","<<ofGetHeight();
     // setup for nice jaggy-less rendering
 	ofSetVerticalSync(true);
-	ofBackground(0);
+	ofBackground(153,204,51);
     
     ofSoundSetVolume(0.0);
     
     background.load("background.png");
     background.setAnchorPercent(0.5,0.5);
     
-    inicio.load("inicio.png");
+    inicio.load("logo.png");
     inicio.setAnchorPercent(0.5,0.5);
-    inicio.setPosition(ofPoint(1630,148));
+    inicio.setPosition(ofGetWidth()*0.1,ofGetHeight()*0.9);
     
     puntaje=0;
     tiempo=0.;
@@ -76,8 +76,8 @@ void testApp::draw() {
     background.draw(0,0);
     ofPopMatrix();
     
-    inicio.draw();
     sceneManager.draw();
+    inicio.draw();
     
 	// drop out of the auto transform space back to OF screen space
 #ifdef _DEBUG
