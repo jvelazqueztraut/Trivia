@@ -26,7 +26,6 @@ void testApp::setup() {
     
 	// load scenes
     sceneManager.add(new Inicio(sceneManager));
-    sceneManager.add(new Genero(sceneManager));
     sceneManager.add(new Pregunta(sceneManager, puntaje, tiempo));
     sceneManager.add(new Memotest(sceneManager, puntaje, tiempo));
     sceneManager.add(new Score(sceneManager, puntaje, tiempo));

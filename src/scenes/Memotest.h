@@ -4,6 +4,7 @@
 #include "scenes.h"
 
 #define MEMOTEST_CARDS 2
+
 #define MEMOTEST_CARDS_TOTAL (MEMOTEST_CARDS*2)
 
 #define MEMOTEST_ROWS 3
@@ -30,8 +31,8 @@ public:
         background.setPosition(ofPoint(ofGetWidth()*0.5,ofGetHeight()*0.5));
 
         for(int i=0;i<MEMOTEST_CARDS;i++){
-            cards[i*2+0].setup(i,"04_Memotest/CARDS/"+ofToString(i)+".png","04_Memotest/CARDS/back.png");
-            cards[i*2+1].setup(i,"04_Memotest/CARDS/"+ofToString(i)+".png","04_Memotest/CARDS/back.png");
+            cards[i*2+0].setup(i,"04_Memotest/cards/"+ofToString(i)+".png","04_Memotest/cards/back.png");
+            cards[i*2+1].setup(i,"04_Memotest/cards/"+ofToString(i)+".png","04_Memotest/cards/back.png");
         }
         
         clock.load("04_Memotest/clock.png");
@@ -45,6 +46,9 @@ public:
         soundFalse.load("Sounds/04_4.7-RespuestaIncorrecta.wav");
         soundEnd.load("Sounds/04_4.9-FinalizacionTrivia.wav");
         
+        for(int i=0;i<MEMOTEST_CARDS_TOTAL;i++)
+            order[i]=i;
+        
         firstCard=-1;
         secondCard=-1;
     }
@@ -52,8 +56,6 @@ public:
     // scene setup
     void setup() {
         
-        for(int i=0;i<MEMOTEST_CARDS_TOTAL;i++)
-            order[i]=i;
         for(int r = 0; r < 2; r++){
             for(int i=0;i<MEMOTEST_CARDS_TOTAL;i++){
                 int j = ofRandom(MEMOTEST_CARDS_TOTAL);

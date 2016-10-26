@@ -7,10 +7,6 @@
 class Inicio;
 #define INICIO_SCENE_NAME "Inicio"
 
-#include "Genero.h"
-class Genero;
-#define GENERO_SCENE_NAME "Genero"
-
 #include "Pregunta.h"
 class Pregunta;
 #define PREGUNTA_SCENE_NAME "Pregunta"
