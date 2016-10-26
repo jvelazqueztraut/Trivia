@@ -8,9 +8,9 @@
 class Inicio : public ofxScene {
 public:
     // set the scene name through the base class initializer
-    Inicio(ofxSceneManager& sm) : sceneManager(sm), ofxScene(INICIO_SCENE_NAME, false) {
+    Inicio(ofxSceneManager& sm, int& g) : sceneManager(sm), game(g), ofxScene(INICIO_SCENE_NAME, false) {
 
-        icon.load("00_Inicio/icono.png");
+        icon.load("icono.png");
         icon.setAnchorPercent(0.5,0.5);
         icon.position.setDuration(2.5);
         icon.position.setCurve(TANH);
@@ -38,9 +38,16 @@ public:
     
     // scene setup
     void setup() {
-        icon.setPosition(ofGetWidth()*0.25,-ofGetHeight()*0.6);
         title.setPosition(ofGetWidth()*0.65,-ofGetHeight()*0.6);
-        membrete.setPosition(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight());
+        
+        if(game<0){
+            icon.setPosition(ofGetWidth()*0.25,-ofGetHeight()*0.6);
+            membrete.setPosition(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight());
+        }
+        else{
+            icon.setPosition(ofGetWidth()*0.25,ofGetHeight()*0.4);
+            membrete.setPosition(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight()*0.2);
+        }
         
         trivia.setPosition(ofGetWidth()*0.65,ofGetHeight()*0.45);
         trivia.setSize(0.);
@@ -95,7 +102,12 @@ public:
         if(isExitingFirst()) {
             icon.position.animateTo(ofPoint(ofGetWidth()*0.25,-ofGetHeight()*0.6));
             title.position.animateTo(ofPoint(ofGetWidth()*0.65,-ofGetHeight()*0.6));
-            membrete.position.animateToAfterDelay(ofPoint(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight()),1.);
+            
+            if(game==GAME_TRIVIA)
+                membrete.position.animateToAfterDelay(ofPoint(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight()*0.2),1.);
+            else
+                membrete.position.animateToAfterDelay(ofPoint(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight()),1.);
+            
             sound.play();
             ofLogNotice(INICIO_SCENE_NAME) << "update exit";
         }
@@ -127,17 +139,20 @@ public:
     void mousePressed(int x, int y, int button){
         if(isEntering() || isExiting())
             return;
-        if(memotest.inside(ofPoint(x,y))){
-            soundMemotest.play();
-            memotest.size.animateToAfterDelay(0.,1.);
-            trivia.size.animateToAfterDelay(0.,0.);
-            sceneManager.gotoScene(MEMOTEST_SCENE_NAME);
-        }
-        else if(trivia.inside(ofPoint(x,y))){
+        
+        if(trivia.inside(ofPoint(x,y))){
+            game=GAME_TRIVIA;
             soundTrivia.play();
             trivia.size.animateToAfterDelay(0.,1.);
             memotest.size.animateToAfterDelay(0.,0.);
             sceneManager.gotoScene(PREGUNTA_SCENE_NAME);
+        }
+        else if(memotest.inside(ofPoint(x,y))){
+            game=GAME_MEMOTEST;
+            soundMemotest.play();
+            memotest.size.animateToAfterDelay(0.,1.);
+            trivia.size.animateToAfterDelay(0.,0.);
+            sceneManager.gotoScene(MEMOTEST_SCENE_NAME);
         }
     }
     
@@ -145,5 +160,6 @@ public:
     ofxAnimatableObject<ofImage> memotest,trivia;
     ofSoundPlayer sound,soundMemotest,soundTrivia;
     float time;
+    int& game;
     ofxSceneManager& sceneManager;
 };

@@ -37,7 +37,7 @@ public:
         
         clock.load("04_Memotest/clock.png");
         clock.setAnchorPercent(0.5,0.5);
-        gizmosFont.load("DIN-Medium.ttf",46);
+        gizmosFont.load("font.ttf",46);
         
         soundRespuesta.load("Sounds/04_4.2-SeleccionRespuesta.wav");
         soundClock.load("Sounds/04_4.3-ContadorJuego.wav");

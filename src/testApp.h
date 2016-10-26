@@ -30,9 +30,9 @@ class testApp : public ofxApp { // <-- inherits ofxApp instead of ofBaseApp
 		int lastScene;
     
         int puntaje;
-        int nivel;
         float tiempo;
-        
+        int game;
+    
         ofImage background;
         ofxAnimatableObject<ofImage> inicio;
     

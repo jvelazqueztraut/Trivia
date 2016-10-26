@@ -7,22 +7,17 @@
 
 #define PREGUNTA_MAX_QUESTIONS 2
 
-#define PREGUNTA_OPTIONS_X (ofGetWidth()*0.05)
-#define PREGUNTA_OPTIONS_Y (ofGetHeight()*0.5)
-#define PREGUNTA_OPTIONS_WIDTH (ofGetWidth()*0.55)
+#define PREGUNTA_OPTIONS_X (ofGetWidth()*0.24)
+#define PREGUNTA_OPTIONS_Y (ofGetHeight()*0.48)
+#define PREGUNTA_OPTIONS_WIDTH (ofGetWidth()*0.44)
 #define PREGUNTA_OPTIONS_MARGIN 120
 #define PREGUNTA_QUESTION_HEIGHT (ofGetHeight()*0.2)
 
-#define PREGUNTA_TIMER_TIME 15
-#define PREGUNTA_TIMER_NUMBER 15
-#define PREGUNTA_TIMER_MARGIN 4
-#define PREGUNTA_TIMER_THICK (PREGUNTA_GIZMOS_HEIGHT-PREGUNTA_TIMER_NUMBER*PREGUNTA_TIMER_MARGIN)/PREGUNTA_TIMER_NUMBER
-
-#define PREGUNTA_SCORE_X (ofGetWidth()*0.75)
+#define PREGUNTA_SCORE_X (ofGetWidth()*0.1)
 #define PREGUNTA_SCORE_Y (ofGetHeight()*0.2)
-#define PREGUNTA_SCORE_MARGIN 50
+#define PREGUNTA_SCORE_MARGIN 60
 
-#define PREGUNTA_BACK_MARGIN 40
+#define PREGUNTA_BACK_MARGIN 30
 #define PREGUNTA_BACK_RADIUS 10
 
 typedef enum{
@@ -43,9 +38,14 @@ public:
     
     // set the scene name through the base class initializer
     Pregunta(ofxSceneManager& sm, int& p, float& t) : sceneManager(sm), puntaje(p), tiempo(t), ofxScene(PREGUNTA_SCENE_NAME, false) {
-        background.load("04_Pregunta/background.png");
-        background.setAnchorPercent(0.5,0.5);
-        background.setPosition(ofPoint(ofGetWidth()*0.5,ofGetHeight()*0.5));
+        frontground.load("04_Pregunta/frontground.png");
+        frontground.setAnchorPercent(0.5,0.5);
+        frontground.setPosition(ofPoint(ofGetWidth()*0.5,ofGetHeight()*0.5));
+        
+        membrete.load("membretre.png");
+        membrete.setAnchorPercent(0.5,1.0);
+        membrete.position.setDuration(1.5);
+        membrete.position.setCurve(TANH);
         
         while(ofDirectory::doesDirectoryExist("04_Pregunta/questions/question"+ofToString(questionsTaken.size()+1,2,'0'))){
             QuestionDir q;
@@ -58,6 +58,10 @@ public:
         question.setAnchorPercent(0.5,0.5);
         question.setPosition(PREGUNTA_OPTIONS_X+PREGUNTA_OPTIONS_WIDTH/2,PREGUNTA_OPTIONS_Y-PREGUNTA_OPTIONS_MARGIN-0.5*PREGUNTA_QUESTION_HEIGHT);
         
+        answer.load("04_Pregunta/questions/question01/answer.png");
+        answer.setAnchorPercent(0.,0.5);
+        answer.setPosition(PREGUNTA_OPTIONS_X+PREGUNTA_OPTIONS_WIDTH,PREGUNTA_OPTIONS_Y+PREGUNTA_OPTIONS_MARGIN*PREGUNTA_OPTIONS*0.5-PREGUNTA_OPTIONS_MARGIN);
+        
         option[CORRECT].load("04_Pregunta/questions/question01/correct.png");
         option[FALSE_0].load("04_Pregunta/questions/question01/false0.png");
         option[FALSE_1].load("04_Pregunta/questions/question01/false1.png");
@@ -69,24 +73,34 @@ public:
         for(int i=0;i<PREGUNTA_OPTIONS;i++)
             order[i]=i;
         
-        respuestaCorrect.load("04_Pregunta/respuestaCorrect.png");
-        respuestaCorrect.setAnchorPercent(0.06,0.45);
-        respuestaCorrect.color.setRepeatType(LOOP_BACK_AND_FORTH_ONCE);
-        respuestaCorrect.color.setCurve(EASE_OUT);
+        optionCorrect.load("04_Pregunta/optionCorrect.png");
+        optionCorrect.setAnchorPercent(0.033,0.55);
+        optionIncorrect.load("04_Pregunta/optionIncorrect.png");
+        optionIncorrect.setAnchorPercent(0.033,0.55);
         
+        correct.load("04_Pregunta/correct.png");
+        correct.setAnchorPercent(0.,0.5);
+        correct.setPosition(PREGUNTA_OPTIONS_X+PREGUNTA_OPTIONS_WIDTH,PREGUNTA_OPTIONS_Y-PREGUNTA_OPTIONS_MARGIN-0.5*PREGUNTA_QUESTION_HEIGHT);
+
+        incorrect.load("04_Pregunta/incorrect.png");
+        incorrect.setAnchorPercent(0.,0.5);
+        incorrect.setPosition(PREGUNTA_OPTIONS_X+PREGUNTA_OPTIONS_WIDTH,PREGUNTA_OPTIONS_Y-PREGUNTA_OPTIONS_MARGIN-0.5*PREGUNTA_QUESTION_HEIGHT);
+        
+        next.load("04_Pregunta/next.png");
+        next.setAnchorPercent(0.5,0.5);
+        next.setPosition(PREGUNTA_SCORE_X,PREGUNTA_SCORE_Y+5*PREGUNTA_SCORE_MARGIN);
+
         tick.load("04_Pregunta/tick.png");
         tick.setAnchorPercent(0.5,0.5);
         cross.load("04_Pregunta/cross.png");
         cross.setAnchorPercent(0.5,0.5);
-
-        timer.setCurve(LINEAR);
         
-        puntajeFont.load("DIN-Medium.ttf",36);
-        puntajeFontSmall.load("DIN-Medium.ttf",30);
+        gizmoFontBig.load("font.ttf",72);
+        gizmoFontMiddle.load("font.ttf",40);
+        gizmoFontSmall.load("font.ttf",32);
         
         soundRespuesta.load("Sounds/04_4.2-SeleccionRespuesta.wav");
         soundClock.load("Sounds/04_4.3-ContadorJuego.wav");
-        soundTimer.load("Sounds/04_4.4-ContadorPregunta.wav");
         
         soundCorrect.load("Sounds/04_4.6-RespuestaCorrecta.wav");
         soundFalse.load("Sounds/04_4.7-RespuestaIncorrecta.wav");
@@ -95,22 +109,21 @@ public:
     
     // scene setup
     void setup() {        
-        background.setColor(ofColor(255,0));
-
-        question.setColor(255,0);
-        for(int i=0;i<PREGUNTA_OPTIONS;i++){
-            option[i].setColor(ofColor(255,0));
-        }
-        respuestaCorrect.setColor(ofColor(255,0));
+        frontground.setColor(ofColor(255,0));
+        membrete.setPosition(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight()*0.2);
         
         for(int i=0; i<questionsTaken.size(); i++){
             questionsTaken[i].taken=false;
         }
         questionsCorrect=0;
         questionsFalse=0;
+        questions=0;
+        loadNewQuestion();
         
+        showingAnswer=false;
         changingQuestion=false;
-        timer.reset(0.);
+        
+        next.setColor(ofColor(255,0));
         
         tiempo=0;
         puntaje=0;
@@ -122,20 +135,17 @@ public:
 		
         // called on first enter update
         if(isEnteringFirst()) {
-            background.color.animateTo(ofColor(255,255));
-
-            timer.setDuration(1.5);
-            timer.animateToAfterDelay(PREGUNTA_TIMER_TIME,1.5);
+            frontground.color.animateTo(ofColor(255,255));
+            next.color.animateToAfterDelay(ofColor(255,255),2.5);
             ofLogNotice(PREGUNTA_SCENE_NAME) << "update enter";
         }
         
         update();
 		
         // call finishedEntering() to indicate scne is done entering
-        if(!timer.isOrWillBeAnimating()) {
+        if(!question.isOrWillBeAnimating()) {
             finishedEntering();
             soundClock.play();
-            changingQuestion=true;
             ofLogNotice(PREGUNTA_SCENE_NAME) << "update enter done";
         }
     }
@@ -145,35 +155,39 @@ public:
         float t = ofGetElapsedTimef();
         float dt = t - time;
         time = t;
-        timer.update(dt);
-        background.update(dt);
-        if(!isEntering() && !isExiting() && timer.val()<5 && timer.val()>1 && timer.getTargetValue()==0 && !soundTimer.isPlaying())
-            soundTimer.play();
+
+        frontground.update(dt);
+        membrete.update(dt);
+        next.update(dt);
         
         if(!isEntering() && !isExiting())
             tiempo+=dt;
         
-        respuestaCorrect.update(dt);
         
         question.update(dt);
+        optionCorrect.update(dt);
+        optionIncorrect.update(dt);
         for(int i=0;i<PREGUNTA_OPTIONS;i++){
             option[i].update(dt);
         }
-        
-        if(changingQuestion && !timer.isOrWillBeAnimating() && !question.isOrWillBeAnimating()){
-            if((questionsCorrect+questionsFalse)>=PREGUNTA_MAX_QUESTIONS){
+        answer.update(dt);
+        correct.update(dt);
+        incorrect.update(dt);
+
+        if(showingAnswer && !answer.isOrWillBeAnimating()){
+            nextQuestion(5.0);
+            showingAnswer=false;
+        }
+        if(changingQuestion && !question.isOrWillBeAnimating()){
+            if(questions>=PREGUNTA_MAX_QUESTIONS){
+                nextQuestion(0.);
                 soundEnd.play();
                 sceneManager.gotoScene(SCORE_SCENE_NAME);
             }
             else{
                 loadNewQuestion();
             }
-            timer.setDuration(PREGUNTA_TIMER_TIME);
-            timer.animateToAfterDelay(0.,1.0);
             changingQuestion=false;
-        }
-        else if(!isEntering() && !isExiting() && !changingQuestion && !timer.isOrWillBeAnimating()){
-            nextQuestion();
         }
     }
     
@@ -182,7 +196,8 @@ public:
 		
         // called on first exit update
         if(isExitingFirst()) {
-            background.color.animateToAfterDelay(ofColor(255,0),1.);
+            frontground.color.animateTo(ofColor(255,0));
+            next.color.animateTo(ofColor(255,0));
             
             ofLogNotice(PREGUNTA_SCENE_NAME) << "update exit";
         }
@@ -190,7 +205,7 @@ public:
         update();
 		
         // call finishedExiting() to indicate scene is done exiting
-        if(!background.isOrWillBeAnimating()) {
+        if(!frontground.isOrWillBeAnimating()) {
             finishedExiting();
             ofLogNotice(PREGUNTA_SCENE_NAME) << "update exit done";
         }
@@ -198,25 +213,39 @@ public:
     
     // draw
     void draw() {        
-        background.draw();
+        ofSetColor(255,frontground.color.getCurrentColor().a*0.75);
+        ofDrawRectangle(0,0,ofGetWidth(),ofGetHeight());
         
-        drawBack(ofRectangle(PREGUNTA_OPTIONS_X-PREGUNTA_BACK_MARGIN,PREGUNTA_OPTIONS_Y-PREGUNTA_OPTIONS_MARGIN-PREGUNTA_QUESTION_HEIGHT-PREGUNTA_BACK_MARGIN,PREGUNTA_OPTIONS_WIDTH+PREGUNTA_BACK_MARGIN,PREGUNTA_QUESTION_HEIGHT+PREGUNTA_OPTIONS_MARGIN*(PREGUNTA_OPTIONS+1)+PREGUNTA_BACK_MARGIN),PREGUNTA_BACK_RADIUS);
+        membrete.draw();
+        frontground.draw();
+        //drawBack(ofRectangle(PREGUNTA_OPTIONS_X-PREGUNTA_BACK_MARGIN,PREGUNTA_OPTIONS_Y-PREGUNTA_OPTIONS_MARGIN-PREGUNTA_QUESTION_HEIGHT-PREGUNTA_BACK_MARGIN,PREGUNTA_OPTIONS_WIDTH+PREGUNTA_BACK_MARGIN,PREGUNTA_QUESTION_HEIGHT+PREGUNTA_OPTIONS_MARGIN*(PREGUNTA_OPTIONS+1)+PREGUNTA_BACK_MARGIN),PREGUNTA_BACK_RADIUS);
         question.draw();
-        
-        respuestaCorrect.draw();
+        optionIncorrect.draw();
+        optionCorrect.draw();
         for(int i=0;i<PREGUNTA_OPTIONS;i++){
             option[i].draw();
         }
+        answer.draw();
+        
+        correct.draw();
+        incorrect.draw();
         
         drawBack(ofRectangle(PREGUNTA_SCORE_X-2*PREGUNTA_SCORE_MARGIN-PREGUNTA_BACK_MARGIN,PREGUNTA_SCORE_Y-0.5*PREGUNTA_SCORE_MARGIN-PREGUNTA_BACK_MARGIN,4*PREGUNTA_SCORE_MARGIN+2*PREGUNTA_BACK_MARGIN,4.5*PREGUNTA_SCORE_MARGIN+PREGUNTA_BACK_MARGIN),PREGUNTA_BACK_RADIUS);
-        ofSetColor(background.color.getCurrentColor());
+        ofSetColor(frontground.color.getCurrentColor());
+        
+        gizmoFontMiddle.drawString("Pregunta "+ofToString(questions)+" de "+ ofToString(PREGUNTA_MAX_QUESTIONS),ofGetWidth()*0.025,ofGetHeight()*0.075);
+        
         string puntajeString = "Puntaje";
-        puntajeFontSmall.drawString(puntajeString,PREGUNTA_SCORE_X-puntajeFontSmall.stringWidth(puntajeString)/2,PREGUNTA_SCORE_Y);
-        puntajeFont.drawString(ofToString(puntaje),PREGUNTA_SCORE_X-puntajeFont.stringWidth(ofToString(puntaje))/2,PREGUNTA_SCORE_Y+PREGUNTA_SCORE_MARGIN);
+        gizmoFontSmall.drawString(puntajeString,PREGUNTA_SCORE_X-gizmoFontSmall.stringWidth(puntajeString)/2,PREGUNTA_SCORE_Y);
+        gizmoFontBig.drawString(ofToString(puntaje),PREGUNTA_SCORE_X-gizmoFontBig.stringWidth(ofToString(puntaje))/2,PREGUNTA_SCORE_Y+PREGUNTA_SCORE_MARGIN+gizmoFontBig.stringHeight(ofToString(puntaje))/3);
         tick.draw(PREGUNTA_SCORE_X-PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+2*PREGUNTA_SCORE_MARGIN);
         cross.draw(PREGUNTA_SCORE_X+PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+2*PREGUNTA_SCORE_MARGIN);
-        puntajeFontSmall.drawString(ofToString(questionsCorrect),PREGUNTA_SCORE_X-puntajeFontSmall.stringWidth(ofToString(questionsCorrect))/2-PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+3.25*PREGUNTA_SCORE_MARGIN);
-        puntajeFontSmall.drawString(ofToString(questionsFalse),PREGUNTA_SCORE_X-puntajeFontSmall.stringWidth(ofToString(questionsFalse))/2+PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+3.25*PREGUNTA_SCORE_MARGIN);
+        ofSetColor(51,102,51,frontground.color.getCurrentColor().a);
+        gizmoFontMiddle.drawString(ofToString(questionsCorrect),PREGUNTA_SCORE_X-gizmoFontMiddle.stringWidth(ofToString(questionsCorrect))/2-PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+3.25*PREGUNTA_SCORE_MARGIN);
+        ofSetColor(153,51,51,frontground.color.getCurrentColor().a);
+        gizmoFontMiddle.drawString(ofToString(questionsFalse),PREGUNTA_SCORE_X-gizmoFontMiddle.stringWidth(ofToString(questionsFalse))/2+PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+3.25*PREGUNTA_SCORE_MARGIN);
+        
+        next.draw();
     }
     
     // cleanup
@@ -227,43 +256,75 @@ public:
     void mousePressed(int x, int y, int button){
         if(isEntering() || isExiting())
             return;
-        if(!changingQuestion){
+        if(!showingAnswer && !changingQuestion){
             for(int i=0;i<PREGUNTA_OPTIONS;i++){
                 if(option[i].inside(ofPoint(x,y))){
                     soundRespuesta.play();
                     if(i==CORRECT){
                         questionsCorrect++;
                         puntaje+=10;
+                        correct.color.animateTo(ofColor(255,255));
                         soundCorrect.play();
                     }
                     else{
                         questionsFalse++;
+                        incorrect.color.animateTo(ofColor(255,255));
+                        optionIncorrect.setPosition(option[i].position.getCurrentPosition());
+                        optionIncorrect.color.animateTo(ofColor(255,255));
                         soundFalse.play();
                     }
-                    nextQuestion();
+                    showAnswer();
                     return;
+                }
+            }
+        }
+        if(next.inside(ofPoint(x,y))){
+            if(changingQuestion){
+                if(questions>=PREGUNTA_MAX_QUESTIONS){
+                    soundEnd.play();
+                    sceneManager.gotoScene(SCORE_SCENE_NAME);
+                }
+                else{
+                    loadNewQuestion();
+                }
+                changingQuestion=false;
+            }
+            else{
+                if(showingAnswer){
+                    nextQuestion();
+                    showingAnswer=false;
+                }else{
+                    questionsFalse++;
+                    incorrect.color.animateTo(ofColor(255,255));
+                    soundFalse.play();
+                    showAnswer();
                 }
             }
         }
     }
     
-    void nextQuestion(){
+    void showAnswer(){
+        optionCorrect.setPosition(option[CORRECT].position.getCurrentPosition());
+        optionCorrect.color.animateTo(ofColor(255,255));
+        
+        answer.color.animateTo(ofColor(255,255));
+        
+        showingAnswer=true;
+    }
+    
+    void nextQuestion(float delay=2.0f){
         for(int i=0;i<PREGUNTA_OPTIONS;i++){
-            if(i==CORRECT){
-                respuestaCorrect.setPosition(option[i].position.getCurrentPosition());
-                option[i].color.animateToAfterDelay(ofColor(255,0),1.5);
-            }
-            else{
-                option[i].color.animateToAfterDelay(ofColor(255,0),1.0);
-            }
+            if(i==CORRECT)
+                option[i].color.animateToAfterDelay(ofColor(255,0),delay+0.5);
+            else
+                option[i].color.animateToAfterDelay(ofColor(255,0),delay);
         }
-        respuestaCorrect.color.animateTo(ofColor(255,255));
-        
-        question.color.animateToAfterDelay(ofColor(255,0),1.5);
-        
-        timer.setDuration(1.5);
-        timer.pause();
-        timer.animateToAfterDelay(PREGUNTA_TIMER_TIME,1.0);
+        optionIncorrect.color.animateToAfterDelay(ofColor(255,0),delay);
+        optionCorrect.color.animateToAfterDelay(ofColor(255,0),delay+0.5);
+        correct.color.animateToAfterDelay(ofColor(255,0),delay);
+        incorrect.color.animateToAfterDelay(ofColor(255,0),delay);
+        answer.color.animateToAfterDelay(ofColor(255,0),delay+0.5);
+        question.color.animateToAfterDelay(ofColor(255,0),delay+0.5);
         
         changingQuestion=true;
     }
@@ -274,15 +335,25 @@ public:
             q=ofRandom(questionsTaken.size());
         }while(questionsTaken[q].taken);
         questionsTaken[q].taken=true;
+        questions++;
 
         question.load(questionsTaken[q].path+"/question.png");
         question.setAnchorPercent(0.5,0.5);
         question.setColor(ofColor(255,0));
-        question.color.animateTo(ofColor(255,255));
+        question.color.animateToAfterDelay(ofColor(255,255),0.5);
+        
+        answer.load(questionsTaken[q].path+"/answer.png");
+        answer.setAnchorPercent(0.,0.5);
+        answer.setColor(ofColor(255,0));
         
         option[CORRECT].load(questionsTaken[q].path+"/correct.png");
         option[FALSE_0].load(questionsTaken[q].path+"/false0.png");
         option[FALSE_1].load(questionsTaken[q].path+"/false1.png");
+        
+        optionCorrect.setColor(ofColor(255,0));
+        optionIncorrect.setColor(ofColor(255,0));
+        correct.setColor(ofColor(255,0));
+        incorrect.setColor(ofColor(255,0));
         
         for(int r = 0; r < 2; r++){
             for(int i=0;i<PREGUNTA_OPTIONS;i++){
@@ -296,41 +367,43 @@ public:
             option[i].setAnchorPercent(0.,0.5);
             option[order[i]].setPosition(PREGUNTA_OPTIONS_X,PREGUNTA_OPTIONS_Y+i*PREGUNTA_OPTIONS_MARGIN);
             option[order[i]].setColor(ofColor(255,0));
-            option[order[i]].color.animateToAfterDelay(ofColor(255,255),0.5*i);
+            option[order[i]].color.animateToAfterDelay(ofColor(255,255),0.5+0.5*i);
         }
     }
     
     ofxAnimatableObject<ofImage> question;
     ofxAnimatableObject<ofImage> option[PREGUNTA_OPTIONS];
-    unsigned int order[PREGUNTA_OPTIONS];
-    ofxAnimatableObject<ofImage> respuestaCorrect;
-    bool changingQuestion;
+    ofxAnimatableObject<ofImage> answer;
+    ofxAnimatableObject<ofImage> optionCorrect,optionIncorrect;
+    ofxAnimatableObject<ofImage> correct,incorrect;
+    ofxAnimatableObject<ofImage> next;
+    bool showingAnswer,changingQuestion;
     
-    unsigned int questionsCorrect,questionsFalse;
+    unsigned int order[PREGUNTA_OPTIONS];
+    unsigned int questions,questionsCorrect,questionsFalse;
     vector<QuestionDir> questionsTaken;
     
-    ofSoundPlayer soundRespuesta,soundClock,soundTimer;
+    ofSoundPlayer soundRespuesta,soundClock;
     ofSoundPlayer soundCorrect,soundFalse,soundEnd;
 
     ofImage tick,cross;
-    ofTrueTypeFont puntajeFont,puntajeFontSmall;
-    ofxAnimatableFloat timer;
+    ofTrueTypeFont gizmoFontBig,gizmoFontMiddle,gizmoFontSmall;
 
     int& puntaje;
     float& tiempo;
     float time;
     
-    ofxAnimatableObject<ofImage> background;
+    ofxAnimatableObject<ofImage> frontground,membrete;
     ofxSceneManager& sceneManager;
     
     void drawBack(ofRectangle rect, float r, float w=5.0f){
         ofPushStyle();
         ofSetCircleResolution(100);
         ofFill();
-        ofSetColor(255,ofMap(background.color.getCurrentColor().a,0,255,0,50));
+        ofSetColor(204,204,102,ofMap(frontground.color.getCurrentColor().a,0,255,0,200));
         ofDrawRectRounded(rect,r);
         ofNoFill();
-        ofSetColor(255,ofMap(background.color.getCurrentColor().a,0,255,0,100));
+        ofSetColor(0,102,51,ofMap(frontground.color.getCurrentColor().a,0,255,0,150));
         ofSetLineWidth(w);
         ofDrawRectRounded(rect.x-w/2,rect.y-w/2,rect.width+w,rect.height+w,r);
         ofPopStyle();

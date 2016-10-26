@@ -19,16 +19,18 @@ void testApp::setup() {
     
     inicio.load("logo.png");
     inicio.setAnchorPercent(0.5,0.5);
-    inicio.setPosition(ofGetWidth()*0.1,ofGetHeight()*0.9);
+    inicio.setPosition(ofGetWidth()*0.1,ofGetHeight()*0.933);
     
     puntaje=0;
     tiempo=0.;
     
+    game=-1;
+    
 	// load scenes
-    sceneManager.add(new Inicio(sceneManager));
+    sceneManager.add(new Inicio(sceneManager, game));
     sceneManager.add(new Pregunta(sceneManager, puntaje, tiempo));
     sceneManager.add(new Memotest(sceneManager, puntaje, tiempo));
-    sceneManager.add(new Score(sceneManager, puntaje, tiempo));
+    sceneManager.add(new Score(sceneManager, game, puntaje, tiempo));
     
     //sceneManager.setup(true);	// true = setup all the scenes now (not on the fly)
 	ofSetLogLevel("ofxSceneManager", OF_LOG_VERBOSE); // lets see whats going on inside
