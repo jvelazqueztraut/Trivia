@@ -3,7 +3,7 @@
 
 int main(){
 #ifdef _DEBUG
-	ofSetupOpenGL(APP_WIDTH, APP_HEIGHT, OF_WINDOW);
+	ofSetupOpenGL(1024, 768, OF_WINDOW);
 #else
 	ofSetupOpenGL(APP_WIDTH, APP_HEIGHT, OF_FULLSCREEN);
 #endif

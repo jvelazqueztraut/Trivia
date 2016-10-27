@@ -4,11 +4,11 @@
 #include "scenes.h"
 #include "ofxAnimatableObject.h"
 
-#define SCORE_X ofGetWidth()*0.6
-#define SCORE_Y ofGetHeight()*0.5
+#define SCORE_X (ofGetWidth()*0.65)
+#define SCORE_Y (ofGetHeight()*0.5)
 
-#define SCORE_BACK_MARGIN 60
-#define SCORE_BACK_RADIUS 10
+#define SCORE_BACK_MARGIN (60*ofGetHeight()/APP_HEIGHT)
+#define SCORE_BACK_RADIUS (10*ofGetHeight()/APP_HEIGHT)
 
 class Score : public ofxScene {
     
@@ -30,12 +30,12 @@ public:
         membrete.position.setDuration(1.5);
         membrete.position.setCurve(TANH);
         
-        score.load("font.ttf",72);
+        score.load("font.ttf",72*ofGetHeight()/APP_HEIGHT);
         score.setText("");
         score.setAnchorPercent(0.5,0.5);
         score.setPosition(SCORE_X,SCORE_Y);
 
-        scoreSmall.load("font.ttf",32);
+        scoreSmall.load("font.ttf",32*ofGetHeight()/APP_HEIGHT);
         scoreSmall.setText("");
         scoreSmall.setAnchorPercent(0.5,0.5);
         scoreSmall.setPosition(SCORE_X+5,SCORE_Y-ofGetHeight()*0.07);
@@ -48,13 +48,19 @@ public:
         soundPositions.load("Sounds/05_5.2-ContadorPosiciones.wav");
         soundYourPosition.load("Sounds/05_5.3-PosicionFinal.wav");
         soundEnd.load("Sounds/05_5.4-FinDelJuego.wav");
+        
+        icon.setSize(ofGetHeight()/APP_HEIGHT);
+        title.setSize(ofGetHeight()/APP_HEIGHT);
+        membrete.setSize(ofGetHeight()/APP_HEIGHT);
+        next.setSize(ofGetHeight()/APP_HEIGHT);
+
     }
     
     // scene setup
     void setup() {
         title.setPosition(ofGetWidth()*0.65,-ofGetHeight()*0.6);
         
-        icon.setPosition(ofGetWidth()*0.25,-ofGetHeight()*0.6);
+        icon.setPosition(ofGetWidth()*0.2,-ofGetHeight()*0.6);
         if(game==GAME_TRIVIA)
             membrete.setPosition(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight()*0.2);
         else
@@ -84,7 +90,7 @@ public:
         if(isEnteringFirst()) {
             title.position.animateTo(ofPoint(SCORE_X,ofGetHeight()*0.25));
             
-            icon.position.animateTo(ofPoint(ofGetWidth()*0.25,ofGetHeight()*0.4));
+            icon.position.animateTo(ofPoint(ofGetWidth()*0.2,ofGetHeight()*0.4));
             membrete.position.animateTo(ofPoint(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight()*0.2));
 
             score.color.animateToAfterDelay(ofColor(255,255),0.5);

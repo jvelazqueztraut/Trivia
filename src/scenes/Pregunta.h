@@ -7,18 +7,21 @@
 
 #define PREGUNTA_MAX_QUESTIONS 2
 
-#define PREGUNTA_OPTIONS_X (ofGetWidth()*0.24)
+#define PREGUNTA_OPTIONS_X (ofGetWidth()*0.075)
 #define PREGUNTA_OPTIONS_Y (ofGetHeight()*0.48)
 #define PREGUNTA_OPTIONS_WIDTH (ofGetWidth()*0.44)
-#define PREGUNTA_OPTIONS_MARGIN 120
+#define PREGUNTA_OPTIONS_MARGIN (120*ofGetHeight()/APP_HEIGHT)
 #define PREGUNTA_QUESTION_HEIGHT (ofGetHeight()*0.2)
 
-#define PREGUNTA_SCORE_X (ofGetWidth()*0.1)
-#define PREGUNTA_SCORE_Y (ofGetHeight()*0.2)
-#define PREGUNTA_SCORE_MARGIN 60
+#define PREGUNTA_SCORE_X (ofGetWidth()*0.75)
+#define PREGUNTA_SCORE_Y (ofGetHeight()*0.15)
+#define PREGUNTA_SCORE_MARGIN (50*ofGetHeight()/APP_HEIGHT)
 
-#define PREGUNTA_BACK_MARGIN 30
-#define PREGUNTA_BACK_RADIUS 10
+#define PREGUNTA_NEXT_X (ofGetWidth()*0.75)
+#define PREGUNTA_NEXT_Y (PREGUNTA_SCORE_Y+ofGetHeight()*0.22)
+
+#define PREGUNTA_BACK_MARGIN (15*ofGetHeight()/APP_HEIGHT)
+#define PREGUNTA_BACK_RADIUS (10*ofGetHeight()/APP_HEIGHT)
 
 typedef enum{
     CORRECT=0,
@@ -39,8 +42,8 @@ public:
     // set the scene name through the base class initializer
     Pregunta(ofxSceneManager& sm, int& p, float& t) : sceneManager(sm), puntaje(p), tiempo(t), ofxScene(PREGUNTA_SCENE_NAME, false) {
         frontground.load("04_Pregunta/frontground.png");
-        frontground.setAnchorPercent(0.5,0.5);
-        frontground.setPosition(ofPoint(ofGetWidth()*0.5,ofGetHeight()*0.5));
+        frontground.setAnchorPercent(0.98,0.5);
+        frontground.setPosition(ofPoint(ofGetWidth(),ofGetHeight()*0.5));
         
         membrete.load("membretre.png");
         membrete.setAnchorPercent(0.5,1.0);
@@ -59,8 +62,8 @@ public:
         question.setPosition(PREGUNTA_OPTIONS_X+PREGUNTA_OPTIONS_WIDTH/2,PREGUNTA_OPTIONS_Y-PREGUNTA_OPTIONS_MARGIN-0.5*PREGUNTA_QUESTION_HEIGHT);
         
         answer.load("04_Pregunta/questions/question01/answer.png");
-        answer.setAnchorPercent(0.,0.5);
-        answer.setPosition(PREGUNTA_OPTIONS_X+PREGUNTA_OPTIONS_WIDTH,PREGUNTA_OPTIONS_Y+PREGUNTA_OPTIONS_MARGIN*PREGUNTA_OPTIONS*0.5-PREGUNTA_OPTIONS_MARGIN);
+        answer.setAnchorPercent(0.5,0.5);
+        answer.setPosition(PREGUNTA_NEXT_X,PREGUNTA_NEXT_Y+ofGetHeight()*0.2);
         
         option[CORRECT].load("04_Pregunta/questions/question01/correct.png");
         option[FALSE_0].load("04_Pregunta/questions/question01/false0.png");
@@ -88,16 +91,16 @@ public:
         
         next.load("04_Pregunta/next.png");
         next.setAnchorPercent(0.5,0.5);
-        next.setPosition(PREGUNTA_SCORE_X,PREGUNTA_SCORE_Y+5*PREGUNTA_SCORE_MARGIN);
+        next.setPosition(PREGUNTA_NEXT_X,PREGUNTA_NEXT_Y);
 
         tick.load("04_Pregunta/tick.png");
         tick.setAnchorPercent(0.5,0.5);
         cross.load("04_Pregunta/cross.png");
         cross.setAnchorPercent(0.5,0.5);
         
-        gizmoFontBig.load("font.ttf",72);
-        gizmoFontMiddle.load("font.ttf",40);
-        gizmoFontSmall.load("font.ttf",32);
+        gizmoFontBig.load("font.ttf",72*ofGetHeight()/APP_HEIGHT);
+        gizmoFontMiddle.load("font.ttf",40*ofGetHeight()/APP_HEIGHT);
+        gizmoFontSmall.load("font.ttf",32*ofGetHeight()/APP_HEIGHT);
         
         soundRespuesta.load("Sounds/04_4.2-SeleccionRespuesta.wav");
         soundClock.load("Sounds/04_4.3-ContadorJuego.wav");
@@ -105,6 +108,19 @@ public:
         soundCorrect.load("Sounds/04_4.6-RespuestaCorrecta.wav");
         soundFalse.load("Sounds/04_4.7-RespuestaIncorrecta.wav");
         soundEnd.load("Sounds/04_4.9-FinalizacionTrivia.wav");
+        
+        frontground.setSize(ofGetHeight()/APP_HEIGHT);
+        membrete.setSize(ofGetHeight()/APP_HEIGHT);
+        question.setSize(ofGetHeight()/APP_HEIGHT);
+        for(int i=0;i<PREGUNTA_OPTIONS;i++)
+            option[i].setSize(ofGetHeight()/APP_HEIGHT);
+        answer.setSize(ofGetHeight()/APP_HEIGHT);
+        optionCorrect.setSize(ofGetHeight()/APP_HEIGHT);
+        optionIncorrect.setSize(ofGetHeight()/APP_HEIGHT);
+        correct.setSize(ofGetHeight()/APP_HEIGHT);
+        incorrect.setSize(ofGetHeight()/APP_HEIGHT);
+        next.setSize(ofGetHeight()/APP_HEIGHT);
+
     }
     
     // scene setup
@@ -227,25 +243,27 @@ public:
         }
         answer.draw();
         
-        correct.draw();
-        incorrect.draw();
-        
-        drawBack(ofRectangle(PREGUNTA_SCORE_X-2*PREGUNTA_SCORE_MARGIN-PREGUNTA_BACK_MARGIN,PREGUNTA_SCORE_Y-0.5*PREGUNTA_SCORE_MARGIN-PREGUNTA_BACK_MARGIN,4*PREGUNTA_SCORE_MARGIN+2*PREGUNTA_BACK_MARGIN,4.5*PREGUNTA_SCORE_MARGIN+PREGUNTA_BACK_MARGIN),PREGUNTA_BACK_RADIUS);
-        ofSetColor(frontground.color.getCurrentColor());
-        
-        gizmoFontMiddle.drawString("Pregunta "+ofToString(questions)+" de "+ ofToString(PREGUNTA_MAX_QUESTIONS),ofGetWidth()*0.025,ofGetHeight()*0.075);
-        
-        string puntajeString = "Puntaje";
-        gizmoFontSmall.drawString(puntajeString,PREGUNTA_SCORE_X-gizmoFontSmall.stringWidth(puntajeString)/2,PREGUNTA_SCORE_Y);
-        gizmoFontBig.drawString(ofToString(puntaje),PREGUNTA_SCORE_X-gizmoFontBig.stringWidth(ofToString(puntaje))/2,PREGUNTA_SCORE_Y+PREGUNTA_SCORE_MARGIN+gizmoFontBig.stringHeight(ofToString(puntaje))/3);
-        tick.draw(PREGUNTA_SCORE_X-PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+2*PREGUNTA_SCORE_MARGIN);
-        cross.draw(PREGUNTA_SCORE_X+PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+2*PREGUNTA_SCORE_MARGIN);
-        ofSetColor(51,102,51,frontground.color.getCurrentColor().a);
-        gizmoFontMiddle.drawString(ofToString(questionsCorrect),PREGUNTA_SCORE_X-gizmoFontMiddle.stringWidth(ofToString(questionsCorrect))/2-PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+3.25*PREGUNTA_SCORE_MARGIN);
-        ofSetColor(153,51,51,frontground.color.getCurrentColor().a);
-        gizmoFontMiddle.drawString(ofToString(questionsFalse),PREGUNTA_SCORE_X-gizmoFontMiddle.stringWidth(ofToString(questionsFalse))/2+PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+3.25*PREGUNTA_SCORE_MARGIN);
+        //correct.draw();
+        //incorrect.draw();
         
         next.draw();
+        
+        gizmoFontMiddle.drawString("Pregunta "+ofToString(questions)+" de "+ ofToString(PREGUNTA_MAX_QUESTIONS),ofGetWidth()*0.025,ofGetHeight()*0.075);
+
+        
+        drawBack(ofRectangle(PREGUNTA_SCORE_X-2*PREGUNTA_SCORE_MARGIN-PREGUNTA_BACK_MARGIN,PREGUNTA_SCORE_Y-0.5*PREGUNTA_SCORE_MARGIN-PREGUNTA_BACK_MARGIN,4*PREGUNTA_SCORE_MARGIN+2*PREGUNTA_BACK_MARGIN,4*PREGUNTA_SCORE_MARGIN+2*PREGUNTA_BACK_MARGIN),PREGUNTA_BACK_RADIUS);
+        ofSetColor(frontground.color.getCurrentColor());
+        
+        string puntajeString = "Puntaje";
+        gizmoFontSmall.drawString(puntajeString,PREGUNTA_SCORE_X-gizmoFontSmall.stringWidth(puntajeString)/2-2,PREGUNTA_SCORE_Y);
+        gizmoFontBig.drawString(ofToString(puntaje),PREGUNTA_SCORE_X-gizmoFontBig.stringWidth(ofToString(puntaje))/2-2,PREGUNTA_SCORE_Y+PREGUNTA_SCORE_MARGIN+gizmoFontBig.stringHeight(ofToString(puntaje))/3);
+        tick.draw(PREGUNTA_SCORE_X-PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+2*PREGUNTA_SCORE_MARGIN,tick.getWidth()*ofGetHeight()/APP_HEIGHT,tick.getHeight()*ofGetHeight()/APP_HEIGHT);
+        cross.draw(PREGUNTA_SCORE_X+PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+2*PREGUNTA_SCORE_MARGIN,cross.getWidth()*ofGetHeight()/APP_HEIGHT,cross.getHeight()*ofGetHeight()/APP_HEIGHT);
+        ofSetColor(51,102,51,frontground.color.getCurrentColor().a);
+        gizmoFontMiddle.drawString(ofToString(questionsCorrect),PREGUNTA_SCORE_X-gizmoFontMiddle.stringWidth(ofToString(questionsCorrect))/2-2-PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+3.25*PREGUNTA_SCORE_MARGIN);
+        ofSetColor(153,51,51,frontground.color.getCurrentColor().a);
+        gizmoFontMiddle.drawString(ofToString(questionsFalse),PREGUNTA_SCORE_X-gizmoFontMiddle.stringWidth(ofToString(questionsFalse))/2-2+PREGUNTA_SCORE_MARGIN,PREGUNTA_SCORE_Y+3.25*PREGUNTA_SCORE_MARGIN);
+                
     }
     
     // cleanup
@@ -343,7 +361,7 @@ public:
         question.color.animateToAfterDelay(ofColor(255,255),0.5);
         
         answer.load(questionsTaken[q].path+"/answer.png");
-        answer.setAnchorPercent(0.,0.5);
+        answer.setAnchorPercent(0.5,0.5);
         answer.setColor(ofColor(255,0));
         
         option[CORRECT].load(questionsTaken[q].path+"/correct.png");
@@ -400,7 +418,7 @@ public:
         ofPushStyle();
         ofSetCircleResolution(100);
         ofFill();
-        ofSetColor(204,204,102,ofMap(frontground.color.getCurrentColor().a,0,255,0,200));
+        ofSetColor(150,200,65,ofMap(frontground.color.getCurrentColor().a,0,255,0,200));
         ofDrawRectRounded(rect,r);
         ofNoFill();
         ofSetColor(0,102,51,ofMap(frontground.color.getCurrentColor().a,0,255,0,150));

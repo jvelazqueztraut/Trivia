@@ -3,7 +3,7 @@
 #include <ofxAppUtils.h>
 #include "scenes.h"
 
-#define MEMOTEST_CARDS 2
+#define MEMOTEST_CARDS 9
 
 #define MEMOTEST_CARDS_TOTAL (MEMOTEST_CARDS*2)
 
@@ -11,14 +11,14 @@
 #define MEMOTEST_COLUMNS 6
 #define MEMOTEST_CARDS_X (ofGetWidth()*0.13)
 #define MEMOTEST_CARDS_Y (ofGetHeight()*0.20)
-#define MEMOTEST_CARDS_WIDTH (ofGetWidth()*0.58)
-#define MEMOTEST_CARDS_HEIGHT (ofGetHeight()*0.58)
+#define MEMOTEST_CARDS_WIDTH (ofGetWidth()*0.75)
+#define MEMOTEST_CARDS_HEIGHT (ofGetHeight()*0.7)
+
+#define MEMOTEST_BACK_MARGIN (20*ofGetHeight()/APP_HEIGHT)
+#define MEMOTEST_BACK_RADIUS (10*ofGetHeight()/APP_HEIGHT)
 
 #define MEMOTEST_CLOCK_X MEMOTEST_CARDS_X+MEMOTEST_CARDS_WIDTH+MEMOTEST_BACK_MARGIN*3
-#define MEMOTEST_CLOCK_Y MEMOTEST_CARDS_Y-MEMOTEST_BACK_MARGIN
-
-#define MEMOTEST_BACK_MARGIN 40
-#define MEMOTEST_BACK_RADIUS 10
+#define MEMOTEST_CLOCK_Y MEMOTEST_CARDS_Y-MEMOTEST_BACK_MARGIN*1.5
 
 class Memotest : public ofxScene {
     
@@ -37,7 +37,7 @@ public:
         
         clock.load("04_Memotest/clock.png");
         clock.setAnchorPercent(0.5,0.5);
-        gizmosFont.load("font.ttf",46);
+        gizmosFont.load("font.ttf",46*ofGetHeight()/APP_HEIGHT);
         
         soundRespuesta.load("Sounds/04_4.2-SeleccionRespuesta.wav");
         soundClock.load("Sounds/04_4.3-ContadorJuego.wav");
@@ -51,6 +51,8 @@ public:
         
         firstCard=-1;
         secondCard=-1;
+        
+        background.setSize(ofGetHeight()/APP_HEIGHT);
     }
     
     // scene setup
@@ -92,7 +94,7 @@ public:
             background.color.animateTo(ofColor(255,255));
             
             for(int i=0;i<MEMOTEST_CARDS_TOTAL;i++){
-                cards[order[i]].size.animateToAfterDelay(1.,i*0.1);
+                cards[order[i]].size.animateToAfterDelay(ofGetHeight()/APP_HEIGHT,i*0.1);
             }
             
             ofLogNotice(MEMOTEST_SCENE_NAME) << "update enter";
@@ -190,7 +192,7 @@ public:
     void draw() {
         background.draw();
         
-        drawBack(ofRectangle(MEMOTEST_CARDS_X-MEMOTEST_BACK_MARGIN-cards[0].getWidth()*0.5,MEMOTEST_CARDS_Y-MEMOTEST_BACK_MARGIN-cards[0].getHeight()*0.5,MEMOTEST_CARDS_WIDTH+2*MEMOTEST_BACK_MARGIN,MEMOTEST_CARDS_HEIGHT+2*MEMOTEST_BACK_MARGIN),MEMOTEST_BACK_RADIUS);
+        drawBack(ofRectangle(MEMOTEST_CARDS_X-MEMOTEST_BACK_MARGIN-cards[0].getWidth()*0.5,MEMOTEST_CARDS_Y-MEMOTEST_BACK_MARGIN-cards[0].getHeight()*0.5,MEMOTEST_CARDS_WIDTH+4*MEMOTEST_BACK_MARGIN,MEMOTEST_CARDS_HEIGHT+2*MEMOTEST_BACK_MARGIN),MEMOTEST_BACK_RADIUS);
         
         for(int i=0;i<MEMOTEST_CARDS_TOTAL;i++){
             cards[i].draw();

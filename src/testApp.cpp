@@ -20,6 +20,7 @@ void testApp::setup() {
     inicio.load("logo.png");
     inicio.setAnchorPercent(0.5,0.5);
     inicio.setPosition(ofGetWidth()*0.1,ofGetHeight()*0.933);
+    inicio.setSize(ofGetHeight()/APP_HEIGHT);
     
     puntaje=0;
     tiempo=0.;

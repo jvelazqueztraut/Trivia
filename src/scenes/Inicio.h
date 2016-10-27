@@ -34,6 +34,11 @@ public:
         sound.load("Sounds/00_0.2-Transicion0a1.wav");
         soundMemotest.load("Sounds/01_1.2-Mujer.wav");
         soundTrivia.load("Sounds/01_1.1-Hombre.wav");
+        
+        
+        icon.setSize(ofGetHeight()/APP_HEIGHT);
+        title.setSize(ofGetHeight()/APP_HEIGHT);
+        membrete.setSize(ofGetHeight()/APP_HEIGHT);
     }
     
     // scene setup
@@ -41,11 +46,11 @@ public:
         title.setPosition(ofGetWidth()*0.65,-ofGetHeight()*0.6);
         
         if(game<0){
-            icon.setPosition(ofGetWidth()*0.25,-ofGetHeight()*0.6);
+            icon.setPosition(ofGetWidth()*0.2,-ofGetHeight()*0.6);
             membrete.setPosition(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight());
         }
         else{
-            icon.setPosition(ofGetWidth()*0.25,ofGetHeight()*0.4);
+            icon.setPosition(ofGetWidth()*0.2,ofGetHeight()*0.4);
             membrete.setPosition(ofGetWidth()*0.5,ofGetHeight()+membrete.getHeight()*0.2);
         }
         
@@ -63,12 +68,12 @@ public:
 		
         // called on first enter update
         if(isEnteringFirst()) {
-            icon.position.animateTo(ofPoint(ofGetWidth()*0.25,ofGetHeight()*0.4));
+            icon.position.animateTo(ofPoint(ofGetWidth()*0.2,ofGetHeight()*0.4));
             title.position.animateTo(ofPoint(ofGetWidth()*0.65,ofGetHeight()*0.25));
             membrete.position.animateTo(ofPoint(ofGetWidth()*0.5,ofGetHeight()));
             
-            trivia.size.animateToAfterDelay(1.,1.);
-            memotest.size.animateToAfterDelay(1.,1.5);
+            trivia.size.animateToAfterDelay(ofGetHeight()/APP_HEIGHT,1.);
+            memotest.size.animateToAfterDelay(ofGetHeight()/APP_HEIGHT,1.5);
             
             ofLogNotice(INICIO_SCENE_NAME) << "update enter";
         }
@@ -100,7 +105,7 @@ public:
 		
         // called on first exit update
         if(isExitingFirst()) {
-            icon.position.animateTo(ofPoint(ofGetWidth()*0.25,-ofGetHeight()*0.6));
+            icon.position.animateTo(ofPoint(ofGetWidth()*0.2,-ofGetHeight()*0.6));
             title.position.animateTo(ofPoint(ofGetWidth()*0.65,-ofGetHeight()*0.6));
             
             if(game==GAME_TRIVIA)
