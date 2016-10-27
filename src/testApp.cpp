@@ -9,7 +9,7 @@ void testApp::setup() {
 	ofSetVerticalSync(true);
 	ofBackground(153,204,51);
     
-    ofSoundSetVolume(0.0);
+    //ofSoundSetVolume(0.0);
     
     background.load("background.png");
     background.setAnchorPercent(0.5,0.5);
