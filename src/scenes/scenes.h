@@ -7,6 +7,8 @@
 #define GAME_MEMOTEST 1
 #define GAME_GAMES 2
 
+#define SCENE_TIMEOUT 300
+
 #include "Inicio.h"
 class Inicio;
 #define INICIO_SCENE_NAME "Inicio"

@@ -83,6 +83,8 @@ public:
 
         tiempo=0;
         puntaje=0;
+        
+        timeout=SCENE_TIMEOUT;
         time=ofGetElapsedTimef();
     }
     
@@ -159,6 +161,11 @@ public:
             }
         }
         
+        if(!isEntering() && !isExiting()){
+            timeout-=dt;
+            if(timeout<=0.0f)
+                sceneManager.gotoScene(INICIO_SCENE_NAME);
+        }
     }
     
     // called when scene is exiting
@@ -242,7 +249,7 @@ public:
     
     int& puntaje;
     float& tiempo;
-    float time;
+    float time,timeout;
     ofxAnimatableObject<ofImage> background;
     ofxSceneManager& sceneManager;
     

@@ -80,6 +80,7 @@ public:
 
         next.setColor(ofColor(255,0));
         
+        timeout=SCENE_TIMEOUT;
         time=ofGetElapsedTimef();
     }
     
@@ -121,6 +122,12 @@ public:
         next.update(dt);
         score.update(dt);
         scoreSmall.update(dt);
+        
+        if(!isEntering() && !isExiting()){
+            timeout-=dt;
+            if(timeout<=0.0f)
+                sceneManager.gotoScene(INICIO_SCENE_NAME);
+        }
     }
     
     // called when scene is exiting
@@ -178,7 +185,7 @@ public:
     ofxAnimatableObject<ofImage> next;
     
     ofSoundPlayer soundInicio,soundPositions,soundYourPosition,soundEnd;
-    float time;
+    float time,timeout;
     
     int& puntaje;
     float& tiempo;

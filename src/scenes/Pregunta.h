@@ -143,6 +143,8 @@ public:
         
         tiempo=0;
         puntaje=0;
+        
+        timeout=SCENE_TIMEOUT;
         time=ofGetElapsedTimef();
     }
     
@@ -204,6 +206,12 @@ public:
                 loadNewQuestion();
             }
             changingQuestion=false;
+        }
+        
+        if(!isEntering() && !isExiting()){
+            timeout-=dt;
+            if(timeout<=0.0f)
+                sceneManager.gotoScene(INICIO_SCENE_NAME);
         }
     }
     
@@ -409,7 +417,7 @@ public:
 
     int& puntaje;
     float& tiempo;
-    float time;
+    float time,timeout;
     
     ofxAnimatableObject<ofImage> frontground,membrete;
     ofxSceneManager& sceneManager;
