@@ -5,7 +5,7 @@
 #include "ofxAnimatableObject.h"
 #include "ofxAnimatableFloat.h"
 
-#define PREGUNTA_MAX_QUESTIONS 2
+#define PREGUNTA_MAX_QUESTIONS 8
 
 #define PREGUNTA_OPTIONS_X (ofGetWidth()*0.075)
 #define PREGUNTA_OPTIONS_Y (ofGetHeight()*0.48)
@@ -57,17 +57,17 @@ public:
             questionsTaken.push_back(q);
         }
         
-        question.load("04_Pregunta/questions/question01/question.png");
+        question.load("04_Pregunta/questions/question01/p_question.png");
         question.setAnchorPercent(0.5,0.5);
         question.setPosition(PREGUNTA_OPTIONS_X+PREGUNTA_OPTIONS_WIDTH/2,PREGUNTA_OPTIONS_Y-PREGUNTA_OPTIONS_MARGIN-0.5*PREGUNTA_QUESTION_HEIGHT);
         
-        answer.load("04_Pregunta/questions/question01/answer.png");
+        answer.load("04_Pregunta/questions/question01/p_answer.png");
         answer.setAnchorPercent(0.5,0.5);
         answer.setPosition(PREGUNTA_NEXT_X,PREGUNTA_NEXT_Y+ofGetHeight()*0.2);
         
-        option[CORRECT].load("04_Pregunta/questions/question01/correct.png");
-        option[FALSE_0].load("04_Pregunta/questions/question01/false0.png");
-        option[FALSE_1].load("04_Pregunta/questions/question01/false1.png");
+        option[CORRECT].load("04_Pregunta/questions/question01/p_correct.png");
+        option[FALSE_0].load("04_Pregunta/questions/question01/p_false0.png");
+        option[FALSE_1].load("04_Pregunta/questions/question01/p_false1.png");
         for(int i=0;i<PREGUNTA_OPTIONS;i++){
             option[i].setAnchorPercent(0.,0.5);
             option[i].setPosition(PREGUNTA_OPTIONS_X,PREGUNTA_OPTIONS_Y+i*PREGUNTA_OPTIONS_MARGIN);
@@ -355,18 +355,18 @@ public:
         questionsTaken[q].taken=true;
         questions++;
 
-        question.load(questionsTaken[q].path+"/question.png");
+        question.load(questionsTaken[q].path+"/p_question.png");
         question.setAnchorPercent(0.5,0.5);
         question.setColor(ofColor(255,0));
         question.color.animateToAfterDelay(ofColor(255,255),0.5);
         
-        answer.load(questionsTaken[q].path+"/answer.png");
+        answer.load(questionsTaken[q].path+"/p_answer.png");
         answer.setAnchorPercent(0.5,0.5);
         answer.setColor(ofColor(255,0));
         
-        option[CORRECT].load(questionsTaken[q].path+"/correct.png");
-        option[FALSE_0].load(questionsTaken[q].path+"/false0.png");
-        option[FALSE_1].load(questionsTaken[q].path+"/false1.png");
+        option[CORRECT].load(questionsTaken[q].path+"/p_correct.png");
+        option[FALSE_0].load(questionsTaken[q].path+"/p_false0.png");
+        option[FALSE_1].load(questionsTaken[q].path+"/p_false1.png");
         
         optionCorrect.setColor(ofColor(255,0));
         optionIncorrect.setColor(ofColor(255,0));
