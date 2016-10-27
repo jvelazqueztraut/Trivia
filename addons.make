@@ -1,4 +1,4 @@
+ofxGui
 ofxAnimatable
 ofxAppUtils
-ofxGui
 ofxJSON

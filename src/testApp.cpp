@@ -14,10 +14,10 @@ void testApp::setup() {
     
     ofSoundSetVolume(0.0);
     
-    background.load("background.png");
+    background.loadImage("background.png");
     background.setAnchorPercent(0.5,0.5);
     
-    inicio.load("logo.png");
+    inicio.loadImage("logo.png");
     inicio.setAnchorPercent(0.5,0.5);
     inicio.setPosition(ofGetWidth()*0.1,ofGetHeight()*0.933);
     inicio.setSize(ofGetHeight()/APP_HEIGHT);

@@ -15,39 +15,39 @@ class Score : public ofxScene {
 public:
     // set the scene name through the base class initializer
     Score(ofxSceneManager& sm, int& g, int& p, float& t) : sceneManager(sm), game(g), puntaje(p), tiempo(t), ofxScene(SCORE_SCENE_NAME, false) {
-        icon.load("icono.png");
+        icon.loadImage("icono.png");
         icon.setAnchorPercent(0.5,0.5);
         icon.position.setDuration(2.5);
         icon.position.setCurve(TANH);
         
-        title.load("05_Score/titulo.png");
+        title.loadImage("05_Score/titulo.png");
         title.setAnchorPercent(0.5,0.5);
         title.position.setDuration(2.);
         title.position.setCurve(TANH);
         
-        membrete.load("membretre.png");
+        membrete.loadImage("membretre.png");
         membrete.setAnchorPercent(0.5,1.0);
         membrete.position.setDuration(1.5);
         membrete.position.setCurve(TANH);
         
-        score.load("font.ttf",72*ofGetHeight()/APP_HEIGHT);
+        score.loadFont("font.ttf",72*ofGetHeight()/APP_HEIGHT);
         score.setText("");
         score.setAnchorPercent(0.5,0.5);
         score.setPosition(SCORE_X,SCORE_Y);
 
-        scoreSmall.load("font.ttf",32*ofGetHeight()/APP_HEIGHT);
+        scoreSmall.loadFont("font.ttf",32*ofGetHeight()/APP_HEIGHT);
         scoreSmall.setText("");
         scoreSmall.setAnchorPercent(0.5,0.5);
         scoreSmall.setPosition(SCORE_X+5,SCORE_Y-ofGetHeight()*0.07);
         
-        next.load("05_Score/next.png");
+        next.loadImage("05_Score/next.png");
         next.setAnchorPercent(0.5,0.5);
         next.setPosition(SCORE_X,SCORE_Y+ofGetHeight()*0.125);
         
-        soundInicio.load("Sounds/05_5.1-BotonInicio.wav");
-        soundPositions.load("Sounds/05_5.2-ContadorPosiciones.wav");
-        soundYourPosition.load("Sounds/05_5.3-PosicionFinal.wav");
-        soundEnd.load("Sounds/05_5.4-FinDelJuego.wav");
+        soundInicio.loadSound("Sounds/05_5.1-BotonInicio.wav");
+        soundPositions.loadSound("Sounds/05_5.2-ContadorPosiciones.wav");
+        soundYourPosition.loadSound("Sounds/05_5.3-PosicionFinal.wav");
+        soundEnd.loadSound("Sounds/05_5.4-FinDelJuego.wav");
         
         icon.setSize(ofGetHeight()/APP_HEIGHT);
         title.setSize(ofGetHeight()/APP_HEIGHT);
@@ -197,11 +197,11 @@ public:
         ofSetCircleResolution(100);
         ofFill();
         ofSetColor(204,204,102,ofMap(score.color.getCurrentColor().a,0,255,0,200));
-        ofDrawRectRounded(rect,r);
+        ofRectRounded(rect,r);
         ofNoFill();
         ofSetColor(0,102,51,ofMap(score.color.getCurrentColor().a,0,255,0,150));
         ofSetLineWidth(w);
-        ofDrawRectRounded(rect.x-w/2,rect.y-w/2,rect.width+w,rect.height+w,r);
+        ofRectRounded(rect.x-w/2,rect.y-w/2,rect.width+w,rect.height+w,r);
         ofPopStyle();
     }
 };

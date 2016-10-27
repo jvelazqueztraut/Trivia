@@ -26,7 +26,7 @@ public:
     
     // set the scene name through the base class initializer
     Memotest(ofxSceneManager& sm, int& p, float& t) : sceneManager(sm), puntaje(p), tiempo(t), ofxScene(MEMOTEST_SCENE_NAME, false) {
-        background.load("04_Memotest/background.png");
+        background.loadImage("04_Memotest/background.png");
         background.setAnchorPercent(0.5,0.5);
         background.setPosition(ofPoint(ofGetWidth()*0.5,ofGetHeight()*0.5));
 
@@ -35,16 +35,16 @@ public:
             cards[i*2+1].setup(i,"04_Memotest/cards/"+ofToString(i)+".png","04_Memotest/cards/back.png");
         }
         
-        clock.load("04_Memotest/clock.png");
+        clock.loadImage("04_Memotest/clock.png");
         clock.setAnchorPercent(0.5,0.5);
-        gizmosFont.load("font.ttf",46*ofGetHeight()/APP_HEIGHT);
+        gizmosFont.loadFont("font.ttf",46*ofGetHeight()/APP_HEIGHT);
         
-        soundRespuesta.load("Sounds/04_4.2-SeleccionRespuesta.wav");
-        soundClock.load("Sounds/04_4.3-ContadorJuego.wav");
+        soundRespuesta.loadSound("Sounds/04_4.2-SeleccionRespuesta.wav");
+        soundClock.loadSound("Sounds/04_4.3-ContadorJuego.wav");
         
-        soundCorrect.load("Sounds/04_4.6-RespuestaCorrecta.wav");
-        soundFalse.load("Sounds/04_4.7-RespuestaIncorrecta.wav");
-        soundEnd.load("Sounds/04_4.9-FinalizacionTrivia.wav");
+        soundCorrect.loadSound("Sounds/04_4.6-RespuestaCorrecta.wav");
+        soundFalse.loadSound("Sounds/04_4.7-RespuestaIncorrecta.wav");
+        soundEnd.loadSound("Sounds/04_4.9-FinalizacionTrivia.wav");
         
         for(int i=0;i<MEMOTEST_CARDS_TOTAL;i++)
             order[i]=i;
@@ -277,11 +277,11 @@ public:
         ofSetCircleResolution(100);
         ofFill();
         ofSetColor(255,ofMap(background.color.getCurrentColor().a,0,255,0,50));
-        ofDrawRectRounded(rect,r);
+        ofRectRounded(rect,r);
         ofNoFill();
         ofSetColor(255,ofMap(background.color.getCurrentColor().a,0,255,0,100));
         ofSetLineWidth(w);
-        ofDrawRectRounded(rect.x-w/2,rect.y-w/2,rect.width+w,rect.height+w,r);
+        ofRectRounded(rect.x-w/2,rect.y-w/2,rect.width+w,rect.height+w,r);
         ofPopStyle();
     }
 };

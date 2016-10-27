@@ -10,30 +10,30 @@ public:
     // set the scene name through the base class initializer
     Inicio(ofxSceneManager& sm, int& g) : sceneManager(sm), game(g), ofxScene(INICIO_SCENE_NAME, false) {
 
-        icon.load("icono.png");
+        icon.loadImage("icono.png");
         icon.setAnchorPercent(0.5,0.5);
         icon.position.setDuration(2.5);
         icon.position.setCurve(TANH);
         
-        title.load("00_Inicio/titulo.png");
+        title.loadImage("00_Inicio/titulo.png");
         title.setAnchorPercent(0.5,0.5);
         title.position.setDuration(2.);
         title.position.setCurve(TANH);
         
-        membrete.load("membretre.png");
+        membrete.loadImage("membretre.png");
         membrete.setAnchorPercent(0.5,1.0);
         membrete.position.setDuration(1.5);
         membrete.position.setCurve(TANH);
         
-        memotest.load("00_Inicio/memotest.png");
+        memotest.loadImage("00_Inicio/memotest.png");
         memotest.setAnchorPercent(0.5,0.5);
         
-        trivia.load("00_Inicio/trivia.png");
+        trivia.loadImage("00_Inicio/trivia.png");
         trivia.setAnchorPercent(0.5,0.5);
         
-        sound.load("Sounds/00_0.2-Transicion0a1.wav");
-        soundMemotest.load("Sounds/01_1.2-Mujer.wav");
-        soundTrivia.load("Sounds/01_1.1-Hombre.wav");
+        sound.loadSound("Sounds/00_0.2-Transicion0a1.wav");
+        soundMemotest.loadSound("Sounds/01_1.2-Mujer.wav");
+        soundTrivia.loadSound("Sounds/01_1.1-Hombre.wav");
         
         
         icon.setSize(ofGetHeight()/APP_HEIGHT);

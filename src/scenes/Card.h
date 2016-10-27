@@ -10,8 +10,8 @@ public:
     
     void setup(unsigned int n, string frontFile, string backFile){
         number = n;
-        front.load(frontFile);
-        back.load(backFile);
+        front.loadImage(frontFile);
+        back.loadImage(backFile);
         
         reset();
     }

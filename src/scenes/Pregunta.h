@@ -41,11 +41,11 @@ public:
     
     // set the scene name through the base class initializer
     Pregunta(ofxSceneManager& sm, int& p, float& t) : sceneManager(sm), puntaje(p), tiempo(t), ofxScene(PREGUNTA_SCENE_NAME, false) {
-        frontground.load("04_Pregunta/frontground.png");
+        frontground.loadImage("04_Pregunta/frontground.png");
         frontground.setAnchorPercent(0.98,0.5);
         frontground.setPosition(ofPoint(ofGetWidth(),ofGetHeight()*0.5));
         
-        membrete.load("membretre.png");
+        membrete.loadImage("membretre.png");
         membrete.setAnchorPercent(0.5,1.0);
         membrete.position.setDuration(1.5);
         membrete.position.setCurve(TANH);
@@ -57,17 +57,17 @@ public:
             questionsTaken.push_back(q);
         }
         
-        question.load("04_Pregunta/questions/question01/p_question.png");
+        question.loadImage("04_Pregunta/questions/question01/p_question.png");
         question.setAnchorPercent(0.5,0.5);
         question.setPosition(PREGUNTA_OPTIONS_X+PREGUNTA_OPTIONS_WIDTH/2,PREGUNTA_OPTIONS_Y-PREGUNTA_OPTIONS_MARGIN-0.5*PREGUNTA_QUESTION_HEIGHT);
         
-        answer.load("04_Pregunta/questions/question01/p_answer.png");
+        answer.loadImage("04_Pregunta/questions/question01/p_answer.png");
         answer.setAnchorPercent(0.5,0.5);
         answer.setPosition(PREGUNTA_NEXT_X,PREGUNTA_NEXT_Y+ofGetHeight()*0.2);
         
-        option[CORRECT].load("04_Pregunta/questions/question01/p_correct.png");
-        option[FALSE_0].load("04_Pregunta/questions/question01/p_false0.png");
-        option[FALSE_1].load("04_Pregunta/questions/question01/p_false1.png");
+        option[CORRECT].loadImage("04_Pregunta/questions/question01/p_correct.png");
+        option[FALSE_0].loadImage("04_Pregunta/questions/question01/p_false0.png");
+        option[FALSE_1].loadImage("04_Pregunta/questions/question01/p_false1.png");
         for(int i=0;i<PREGUNTA_OPTIONS;i++){
             option[i].setAnchorPercent(0.,0.5);
             option[i].setPosition(PREGUNTA_OPTIONS_X,PREGUNTA_OPTIONS_Y+i*PREGUNTA_OPTIONS_MARGIN);
@@ -76,38 +76,38 @@ public:
         for(int i=0;i<PREGUNTA_OPTIONS;i++)
             order[i]=i;
         
-        optionCorrect.load("04_Pregunta/optionCorrect.png");
+        optionCorrect.loadImage("04_Pregunta/optionCorrect.png");
         optionCorrect.setAnchorPercent(0.033,0.55);
-        optionIncorrect.load("04_Pregunta/optionIncorrect.png");
+        optionIncorrect.loadImage("04_Pregunta/optionIncorrect.png");
         optionIncorrect.setAnchorPercent(0.033,0.55);
         
-        correct.load("04_Pregunta/correct.png");
+        correct.loadImage("04_Pregunta/correct.png");
         correct.setAnchorPercent(0.,0.5);
         correct.setPosition(PREGUNTA_OPTIONS_X+PREGUNTA_OPTIONS_WIDTH,PREGUNTA_OPTIONS_Y-PREGUNTA_OPTIONS_MARGIN-0.5*PREGUNTA_QUESTION_HEIGHT);
 
-        incorrect.load("04_Pregunta/incorrect.png");
+        incorrect.loadImage("04_Pregunta/incorrect.png");
         incorrect.setAnchorPercent(0.,0.5);
         incorrect.setPosition(PREGUNTA_OPTIONS_X+PREGUNTA_OPTIONS_WIDTH,PREGUNTA_OPTIONS_Y-PREGUNTA_OPTIONS_MARGIN-0.5*PREGUNTA_QUESTION_HEIGHT);
         
-        next.load("04_Pregunta/next.png");
+        next.loadImage("04_Pregunta/next.png");
         next.setAnchorPercent(0.5,0.5);
         next.setPosition(PREGUNTA_NEXT_X,PREGUNTA_NEXT_Y);
 
-        tick.load("04_Pregunta/tick.png");
+        tick.loadImage("04_Pregunta/tick.png");
         tick.setAnchorPercent(0.5,0.5);
-        cross.load("04_Pregunta/cross.png");
+        cross.loadImage("04_Pregunta/cross.png");
         cross.setAnchorPercent(0.5,0.5);
         
-        gizmoFontBig.load("font.ttf",72*ofGetHeight()/APP_HEIGHT);
-        gizmoFontMiddle.load("font.ttf",40*ofGetHeight()/APP_HEIGHT);
-        gizmoFontSmall.load("font.ttf",32*ofGetHeight()/APP_HEIGHT);
+        gizmoFontBig.loadFont("font.ttf",72*ofGetHeight()/APP_HEIGHT);
+        gizmoFontMiddle.loadFont("font.ttf",40*ofGetHeight()/APP_HEIGHT);
+        gizmoFontSmall.loadFont("font.ttf",32*ofGetHeight()/APP_HEIGHT);
         
-        soundRespuesta.load("Sounds/04_4.2-SeleccionRespuesta.wav");
-        soundClock.load("Sounds/04_4.3-ContadorJuego.wav");
+        soundRespuesta.loadSound("Sounds/04_4.2-SeleccionRespuesta.wav");
+        soundClock.loadSound("Sounds/04_4.3-ContadorJuego.wav");
         
-        soundCorrect.load("Sounds/04_4.6-RespuestaCorrecta.wav");
-        soundFalse.load("Sounds/04_4.7-RespuestaIncorrecta.wav");
-        soundEnd.load("Sounds/04_4.9-FinalizacionTrivia.wav");
+        soundCorrect.loadSound("Sounds/04_4.6-RespuestaCorrecta.wav");
+        soundFalse.loadSound("Sounds/04_4.7-RespuestaIncorrecta.wav");
+        soundEnd.loadSound("Sounds/04_4.9-FinalizacionTrivia.wav");
         
         frontground.setSize(ofGetHeight()/APP_HEIGHT);
         membrete.setSize(ofGetHeight()/APP_HEIGHT);
@@ -238,7 +238,7 @@ public:
     // draw
     void draw() {        
         ofSetColor(255,frontground.color.getCurrentColor().a*0.75);
-        ofDrawRectangle(0,0,ofGetWidth(),ofGetHeight());
+        ofRectangle(0,0,ofGetWidth(),ofGetHeight());
         
         membrete.draw();
         frontground.draw();
@@ -363,18 +363,18 @@ public:
         questionsTaken[q].taken=true;
         questions++;
 
-        question.load(questionsTaken[q].path+"/p_question.png");
+        question.loadImage(questionsTaken[q].path+"/p_question.png");
         question.setAnchorPercent(0.5,0.5);
         question.setColor(ofColor(255,0));
         question.color.animateToAfterDelay(ofColor(255,255),0.5);
         
-        answer.load(questionsTaken[q].path+"/p_answer.png");
+        answer.loadImage(questionsTaken[q].path+"/p_answer.png");
         answer.setAnchorPercent(0.5,0.5);
         answer.setColor(ofColor(255,0));
         
-        option[CORRECT].load(questionsTaken[q].path+"/p_correct.png");
-        option[FALSE_0].load(questionsTaken[q].path+"/p_false0.png");
-        option[FALSE_1].load(questionsTaken[q].path+"/p_false1.png");
+        option[CORRECT].loadImage(questionsTaken[q].path+"/p_correct.png");
+        option[FALSE_0].loadImage(questionsTaken[q].path+"/p_false0.png");
+        option[FALSE_1].loadImage(questionsTaken[q].path+"/p_false1.png");
         
         optionCorrect.setColor(ofColor(255,0));
         optionIncorrect.setColor(ofColor(255,0));
@@ -427,11 +427,11 @@ public:
         ofSetCircleResolution(100);
         ofFill();
         ofSetColor(150,200,65,ofMap(frontground.color.getCurrentColor().a,0,255,0,200));
-        ofDrawRectRounded(rect,r);
+        ofRectRounded(rect,r);
         ofNoFill();
         ofSetColor(0,102,51,ofMap(frontground.color.getCurrentColor().a,0,255,0,150));
         ofSetLineWidth(w);
-        ofDrawRectRounded(rect.x-w/2,rect.y-w/2,rect.width+w,rect.height+w,r);
+        ofRectRounded(rect.x-w/2,rect.y-w/2,rect.width+w,rect.height+w,r);
         ofPopStyle();
     }
 };
