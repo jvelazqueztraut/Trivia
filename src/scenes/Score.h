@@ -6,6 +6,7 @@
 
 #define SCORE_X (ofGetWidth()*0.65)
 #define SCORE_Y (ofGetHeight()*0.5)
+#define SCORE_MARGIN (ofGetHeight()*0.05)
 
 #define SCORE_BACK_MARGIN (60*ofGetHeight()/APP_HEIGHT)
 #define SCORE_BACK_RADIUS (10*ofGetHeight()/APP_HEIGHT)
@@ -38,11 +39,11 @@ public:
         scoreSmall.load("font.ttf",32*ofGetHeight()/APP_HEIGHT);
         scoreSmall.setText("");
         scoreSmall.setAnchorPercent(0.5,0.5);
-        scoreSmall.setPosition(SCORE_X+5,SCORE_Y-ofGetHeight()*0.07);
+        scoreSmall.setPosition(SCORE_X+5,SCORE_Y-SCORE_MARGIN);
         
         next.load("05_Score/next.png");
         next.setAnchorPercent(0.5,0.5);
-        next.setPosition(SCORE_X,SCORE_Y+ofGetHeight()*0.125);
+        next.setPosition(SCORE_X,SCORE_Y+3*SCORE_MARGIN);
         
         soundInicio.load("Sounds/05_5.1-BotonInicio.wav");
         soundPositions.load("Sounds/05_5.2-ContadorPosiciones.wav");

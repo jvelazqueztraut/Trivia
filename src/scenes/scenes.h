@@ -1,4 +1,5 @@
-#define _DEBUG
+//#define _DEBUG
+#define FULLSCREEN
 
 #define APP_WIDTH 1920.0
 #define APP_HEIGHT 1080.0
