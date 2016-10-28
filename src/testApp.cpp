@@ -2,10 +2,10 @@
 
 //--------------------------------------------------------------
 void testApp::setup() {
-#ifdef _DEBUG
-    ofShowCursor();
+#ifdef FULLSCREEN
+    ofHideCursor();
 #else
-	ofHideCursor();
+	ofShowCursor();
 #endif
     ofLogWarning()<<"Resolution: "<<ofGetWidth()<<","<<ofGetHeight();
     // setup for nice jaggy-less rendering
